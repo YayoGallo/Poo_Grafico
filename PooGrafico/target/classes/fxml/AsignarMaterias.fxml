@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="482.0" prefWidth="695.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="udelp.edu.PooGrafico.AsignarMateriasController">
+   <children>
+      <Button layoutX="24.0" layoutY="420.0" mnemonicParsing="false" onAction="#volver" text="Volver" />
+      <ChoiceBox fx:id="elegirMaterias" layoutX="273.0" layoutY="202.0" prefWidth="150.0" />
+      <Label layoutX="155.0" layoutY="130.0" text="Selecciona la materia que se asignara al profesor" />
+      <Button layoutX="579.0" layoutY="420.0" mnemonicParsing="false" onAction="#guardar" text="Guardar" />
+   </children>
+</AnchorPane>
