@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="udelp.edu.PooGrafico.ControladorInicio">
+   <children>
+      <Label layoutX="240.0" layoutY="14.0" text="Control escolar" />
+      <PasswordField fx:id="passwordText" layoutX="188.0" layoutY="258.0" />
+      <Label layoutX="230.0" layoutY="65.0" text="Ingresa el usuario" />
+      <TextField fx:id="userText" layoutX="188.0" layoutY="108.0" />
+      <Label layoutX="216.0" layoutY="187.0" text="Ingresa la contraseña" />
+      <Button layoutX="256.0" layoutY="335.0" mnemonicParsing="false" onAction="#iniciarSesion" text="Ingresar" />
+      <Label fx:id="errorUsuario" layoutX="170.0" layoutY="308.0" text="Usuario o contraseña incorrectos" textFill="RED" visible="false" />
+   </children>
+</AnchorPane>

@@ -1,15 +1,18 @@
 package udelp.edu.PooGrafico.process;
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.reflect.TypeToken;
 
 import udelp.edu.PooGrafico.model.Carrera;
 import udelp.edu.PooGrafico.model.Estudiante;
 import udelp.edu.PooGrafico.model.Materia;
 import udelp.edu.PooGrafico.model.MateriaAlumno;
 import udelp.edu.PooGrafico.model.Profesor;
-
+import udelp.edu.PooGrafico.utility.Constantes;
 
 public class ControlEscolar {
 
@@ -17,6 +20,24 @@ public class ControlEscolar {
 	private List<Materia> materias;
 	private List<Profesor> profesores;
 	private List<Estudiante> estudiantes;
+	Archivos archivo = new Archivos();
+	ControlUsuarios control = ControlUsuarios.getInstance();
+	private static ControlEscolar instancia;
+
+	private ControlEscolar() {
+		carreras = new ArrayList<Carrera>();
+		materias = new ArrayList<Materia>();
+		profesores = new ArrayList<Profesor>();
+		estudiantes = new ArrayList<Estudiante>();
+
+	}
+
+	public static ControlEscolar getInstance() {
+		if (null == instancia) {
+			instancia = new ControlEscolar();
+		}
+		return instancia;
+	}
 
 	public Carrera existeCarrera(String nombre) {
 
@@ -321,21 +342,91 @@ public class ControlEscolar {
 		return carreras;
 
 	}
-	
+
 	public List<Profesor> getProfesores() {
 		return profesores;
 
 	}
-	
+
 	public List<Materia> getMaterias() {
 		return materias;
 
 	}
-	
+
 	public List<Estudiante> getEstudiantes() {
 		return estudiantes;
 
 	}
 
-}
+	public <T> void cargarArchivo(String archivo, Type tipoDeLista, List<T> lista) {
+		if (this.archivo.existeArchivo(archivo)) {
+			System.out.println("El archivo existe");
+			List<T> datos = this.archivo.leerArchivo(archivo, tipoDeLista);
+			if (datos != null) {
+				lista.clear(); // Vaciar la lista original
+				lista.addAll(datos); // Agregar todos los elementos de la lista cargada
+			}
+		}
+	}
 
+	public void cargarArchivos() {
+		cargarArchivo(Constantes.NOMBRE_ARCHIVO_CARRERAS, new TypeToken<List<Carrera>>() {
+		}.getType(), carreras);
+		cargarArchivo(Constantes.NOMBRE_ARCHIVO_ALUMNOS, new TypeToken<List<Estudiante>>() {
+		}.getType(), estudiantes);
+		cargarArchivo(Constantes.NOMBRE_ARCHIVO_MATERIAS, new TypeToken<List<Materia>>() {
+		}.getType(), materias);
+		cargarArchivo(Constantes.NOMBRE_ARCHIVO_PROFESORES, new TypeToken<List<Profesor>>() {
+		}.getType(), profesores);
+	}
+
+	public void guardarDatos() {
+		archivo.guardaArchivo(Constantes.NOMBRE_ARCHIVO_CARRERAS, carreras);
+		archivo.guardaArchivo(Constantes.NOMBRE_ARCHIVO_ALUMNOS, estudiantes);
+		archivo.guardaArchivo(Constantes.NOMBRE_ARCHIVO_MATERIAS, materias);
+		archivo.guardaArchivo(Constantes.NOMBRE_ARCHIVO_PROFESORES, profesores);
+		archivo.guardaArchivo(Constantes.NOMBRE_ARCHIVO_USUARIOS, control.getUsuarios());
+	}
+
+	public Estudiante estudiantePorNombre(String nombre) {
+
+		if (estudiantes != null) {
+			for (int i = 0; i < estudiantes.size(); i++) {
+				if (estudiantes.get(i).getNombre().equals(nombre)) {
+
+					return estudiantes.get(i);
+				}
+			}
+		}
+		return null;
+	}
+
+	public List<Estudiante> estudiantesDeMateria(Materia materia) {
+		List<Estudiante> estudiantesMateria = new ArrayList<Estudiante>();
+		for (Estudiante estudiante : estudiantes) {
+			if (null != estudiante.getMaterias()) {
+				for (MateriaAlumno auxMateria : estudiante.getMaterias()) {
+					if (auxMateria.getId().equals(materia.getId())) {
+						estudiantesMateria.add(estudiante);
+						break;
+					}
+				}
+			}
+		}
+		return estudiantesMateria;
+	}
+
+	public Profesor profePorNombre(String nombre) {
+
+		if (profesores != null) {
+			for (int i = 0; i < estudiantes.size(); i++) {
+				if (profesores.get(i).getNombre().equals(nombre)) {
+
+					return profesores.get(i);
+				}
+			}
+		}
+		return null;
+	}
+
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="579.0" prefWidth="921.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="udelp.edu.PooGrafico.ControladorProfe">
+   <children>
+      <ChoiceBox fx:id="elegirMaterias" layoutX="103.0" layoutY="206.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="elegirAlumno" layoutX="103.0" layoutY="310.0" prefWidth="150.0" />
+      <Label layoutX="95.0" layoutY="160.0" text="Selecciona la materia" />
+      <Label layoutX="83.0" layoutY="262.0" text="Selecciona al estudiante" />
+      <TextField fx:id="primerParcial" layoutX="588.0" layoutY="104.0" />
+      <TextField fx:id="segundoParcial" layoutX="589.0" layoutY="206.0" />
+      <TextField fx:id="proyecto" layoutX="588.0" layoutY="310.0" />
+      <TextField fx:id="examen" layoutX="588.0" layoutY="409.0" />
+      <Label layoutX="646.0" layoutY="60.0" text="Primer parcial" />
+      <Label layoutX="637.0" layoutY="160.0" text="Segundo Parcial" />
+      <Label layoutX="647.0" layoutY="262.0" text="Proyecto final" />
+      <Label layoutX="650.0" layoutY="366.0" text="Examen final" />
+      <Button layoutX="657.0" layoutY="497.0" mnemonicParsing="false" onAction="#guardarCalificacion" text="Calificar" />
+      <Button layoutX="80.0" layoutY="497.0" mnemonicParsing="false" onAction="#guardarArchivo" text="Guardar cambios" />
+      <Label fx:id="sinDatos" layoutX="387.0" layoutY="262.0" text="Hacen falta datos" textFill="RED" visible="false" />
+      <Button layoutX="79.0" layoutY="360.0" mnemonicParsing="false" onAction="#actualizar" text="Actualizar estudiantes" />
+   </children>
+</AnchorPane>

@@ -2,6 +2,8 @@ package udelp.edu.PooGrafico.utility;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Validaciones {
 	public boolean validarFecha(String fecha) {
@@ -109,6 +111,20 @@ public class Validaciones {
 		}
 		return respuesta;
 
+	}
+	
+	public boolean validaContraseña(String password) {
+		String regex = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&-+=()¡?¿/%]).{8,}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+	
+	public boolean validaUsuario (String usuario) {
+		String regex = "[ A-Za-z0-9]*";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(usuario);
+        return matcher.matches();
 	}
 
 }
