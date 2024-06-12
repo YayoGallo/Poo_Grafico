@@ -1,6 +1,4 @@
 Manifest-Version: 1.0
-Built-By: Dario Yael Calvario
-Build-Jdk: 17.0.10
-Main-Class: udelp.edu.PooGrafico.MainApp
+Build-Jdk-Spec: 17
 Created-By: Maven Integration for Eclipse
 

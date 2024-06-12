@@ -14,9 +14,14 @@ public class Estudiante extends Persona {
 	
 	private List<MateriaAlumno> materias;
 	
-	public Estudiante(String nombre,Date fechaNacimiento, Character sexo) throws ParseException {
+	public Estudiante(String nombre,Date fechaNacimiento, Character sexo, String cuenta) throws ParseException {
 		
-		super(nombre, fechaNacimiento, sexo);
+		super(nombre, fechaNacimiento, sexo, cuenta);
 		
+	}
+	
+	@Override
+	public String toString() {
+		return  getNombre()+" : "+carrera.getNombre();
 	}
 }

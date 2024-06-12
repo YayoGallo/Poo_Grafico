@@ -7,13 +7,12 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="844.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="udelp.edu.PooGrafico.ControladorCalificaciones">
 	<children>
-		<Label layoutX="331.0" layoutY="456.0" text="Promedio:" />
-		<Label fx:id="mostrarPromedio" layoutX="421.0" layoutY="456.0" />
-		<Label layoutX="63.0" layoutY="237.0" text="Selecciona una materia (En caso de no seleccionar se dara promedio general del semestre)" />
-		<ChoiceBox fx:id="materiaPromedio" layoutX="338.0" layoutY="264.0" prefWidth="150.0" />
-		<ChoiceBox fx:id="semestrePromedio" layoutX="338.0" layoutY="189.0" prefWidth="150.0" />
-		<Label layoutX="320.0" layoutY="162.0" text="Selecciona un semestre" />
-		<Button layoutX="361.0" layoutY="362.0" mnemonicParsing="false" onAction="#promedio" text="Promediar" />
-      <Label layoutX="378.0" layoutY="39.0" />
+		<Label layoutX="270.0" layoutY="39.0" text="Selecciona una materia" />
+		<ChoiceBox fx:id="materiaPromedio" layoutX="286.0" layoutY="66.0" prefWidth="150.0" />
+		<ChoiceBox fx:id="semestrePromedio" layoutX="68.0" layoutY="66.0" prefWidth="150.0" />
+		<Label layoutX="50.0" layoutY="39.0" text="Selecciona un semestre" />
+		<Button layoutX="639.0" layoutY="66.0" mnemonicParsing="false" onAction="#promedio" text="Promediar" />
+      <TextArea fx:id="reporte" editable="false" layoutX="16.0" layoutY="130.0" prefHeight="323.0" prefWidth="815.0" wrapText="true" />
+      <Button layoutX="16.0" layoutY="459.0" mnemonicParsing="false" onAction="#limpiar" text="Limpiar" />
 	</children>
 </AnchorPane>

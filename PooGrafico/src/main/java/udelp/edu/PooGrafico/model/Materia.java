@@ -11,6 +11,7 @@ public class Materia {
 	private Carrera carrera;
 	private String horario;
 	private String id;
+	private boolean asignada;
 	
 	
 	public Materia(String nombre, Integer semestre, Carrera carrera, String horario) {

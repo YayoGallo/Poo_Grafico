@@ -5,6 +5,7 @@ import udelp.edu.PooGrafico.utility.Constantes;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Random;
 
 @Data
@@ -21,19 +22,22 @@ public class Persona {
 	private Double peso;
 
 	private Double altura;
+	
+	private Integer añoIngreso;
 
 	public Persona() {
 
-		this.id = generarID();
+		this.id = "0";
 
 	}
 
-	public Persona(String nombre, Date nacimiento, Character sexo) throws ParseException {
+	public Persona(String nombre, Date nacimiento, Character sexo, String cuenta) throws ParseException {
 
 		this.nombre = nombre;
 		this.fechaNacimiento = nacimiento;
 		this.sexo = sexo;
-		this.id = generarID();
+		this.añoIngreso= LocalDate.now().getYear();
+		this.id = generarID(cuenta);
 
 	}
 
@@ -46,18 +50,15 @@ public class Persona {
 		this.sexo = sexo;
 		this.peso = peso;
 		this.altura = altura;
-		this.id = generarID();
 
 	}
 
-	private String generarID() {
-
-		String id = "";
-		Random random = new Random();
-		do {
-			id += String.valueOf(random.nextInt(9) + 1);
-		} while (id.length() < 8);
-		return id;
-
+	private String generarID(String cuenta) {
+	    String respuesta = añoIngreso + "-";
+	    int cuentaInt = Integer.parseInt(cuenta); // Convertir la cadena a entero
+	    String aux = String.format("%05d", cuentaInt); // Formatear el entero con ceros a la izquierda
+	    respuesta += aux;
+	    return respuesta;
 	}
+
 }

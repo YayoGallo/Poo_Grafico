@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import udelp.edu.PooGrafico.model.Estudiante;
 import udelp.edu.PooGrafico.model.MateriaAlumno;
 import udelp.edu.PooGrafico.process.ControlEscolar;
@@ -17,7 +18,8 @@ public class ControladorCalificaciones {
 	@FXML
 	private ChoiceBox<String> semestrePromedio;
 	@FXML
-	private Label mostrarPromedio;
+	private TextArea reporte;
+	
 	Validaciones valida=new Validaciones();
 	private Estudiante estudiante;
 	private ControlEscolar movimientos= ControlEscolar.getInstance();
@@ -25,25 +27,51 @@ public class ControladorCalificaciones {
 	public void initData(Estudiante estudiante) {
 		this.estudiante = estudiante;
 		ObservableList<String> semestres = FXCollections.observableArrayList();
-		semestres.addAll("1", "2", "3", "4", "5", "6");
+		semestres.addAll(movimientos.obtenerSemestres(estudiante.getSemestre()));
 		semestrePromedio.setItems(semestres);
-		ObservableList<MateriaAlumno> materias = FXCollections.observableArrayList();
-		materias.addAll(estudiante.getMaterias());
-		materiaPromedio.setItems(materias);
+		semestrePromedio.setOnAction(e -> actualizarMaterias());
 	}
+	
 	@FXML
 	private void promedio(ActionEvent event) {
 		String respuesta;
 		if(null==materiaPromedio.getValue()&&null!=semestrePromedio.getValue()) {
-			int semestre=valida.esInt(semestrePromedio.getValue());
-			Double promedioSemestre=movimientos.promedioEstudiante(estudiante, semestre);
-			respuesta=promedioSemestre==null?"Faltan datos para promediar":String.valueOf(promedioSemestre);
-			mostrarPromedio.setText(respuesta);
+			
+			respuesta=movimientos.promedioEstudianteSemestre(estudiante, Integer.parseInt(semestrePromedio.getValue()));
+			reporte.setText(respuesta);
+			
 		}else if(null!=materiaPromedio.getValue()&&null!=semestrePromedio.getValue()) {
-			Double promedioMateria=movimientos.promedioMateriaEstudiante(estudiante, materiaPromedio.getValue().getId());
-			respuesta=promedioMateria==null?"Faltan datos para promediar":String.valueOf(promedioMateria);
-			mostrarPromedio.setText(respuesta);
+			
+			respuesta=movimientos.mostrarCalificacionesMateria(estudiante, materiaPromedio.getValue());
+			reporte.setText(respuesta);
+			
 		}
 		
 	}
+	
+	@FXML
+	private void actualizarMaterias () {
+		
+		materiaPromedio.getItems().clear();
+		
+		if(null!=semestrePromedio.getValue()) {
+			
+			ObservableList<MateriaAlumno> materias = FXCollections.observableArrayList();
+			materias.addAll(movimientos.materiasSemestreEstudiante(estudiante, Integer.parseInt(semestrePromedio.getValue())));
+			materiaPromedio.setItems(materias);
+			
+		}
+		
+	}
+	
+	@FXML
+	private void limpiar(ActionEvent event) {
+		
+		materiaPromedio.getItems().clear();
+		materiaPromedio.setValue(null);;
+		semestrePromedio.setValue(null);;
+		reporte.setText("");;
+		
+	}
+	
 }

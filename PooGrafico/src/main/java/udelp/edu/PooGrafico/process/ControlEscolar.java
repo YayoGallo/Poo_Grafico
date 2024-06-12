@@ -13,6 +13,7 @@ import udelp.edu.PooGrafico.model.Materia;
 import udelp.edu.PooGrafico.model.MateriaAlumno;
 import udelp.edu.PooGrafico.model.Profesor;
 import udelp.edu.PooGrafico.utility.Constantes;
+import udelp.edu.PooGrafico.utility.Validaciones;
 
 public class ControlEscolar {
 
@@ -22,6 +23,7 @@ public class ControlEscolar {
 	private List<Estudiante> estudiantes;
 	Archivos archivo = new Archivos();
 	ControlUsuarios control = ControlUsuarios.getInstance();
+	Validaciones valida = new Validaciones();
 	private static ControlEscolar instancia;
 
 	private ControlEscolar() {
@@ -143,18 +145,17 @@ public class ControlEscolar {
 	}
 
 	public void materiasAlumno(Estudiante estudiante) {
-
-		List<MateriaAlumno> auxList = new ArrayList<MateriaAlumno>();
+		List<MateriaAlumno> auxList = new ArrayList<>();
 		Carrera aux = estudiante.getCarrera();
-		for (int i = 0; i < materias.size(); i++) {
-			if (materias.get(i).getCarrera().equals(aux)) {
-				MateriaAlumno aux2 = new MateriaAlumno(materias.get(i));
-				aux2.setId(materias.get(i).getId());
+		for (Materia materia : materias) {
+			if (materia.getCarrera().equals(aux)) {
+				MateriaAlumno aux2 = new MateriaAlumno(materia);
+				aux2.setId(materia.getId());
 				auxList.add(aux2);
 			}
 		}
-		estudiante.setMaterias(auxList);
 
+		estudiante.setMaterias(auxList);
 	}
 
 	public boolean calificarMateria(Estudiante estudiante, String idMateria, Double primerParcial,
@@ -401,14 +402,27 @@ public class ControlEscolar {
 		return null;
 	}
 
-	public List<Estudiante> estudiantesDeMateria(Materia materia) {
+	public List<Estudiante> estudiantesDeMateria(Materia materia, boolean director) {
 		List<Estudiante> estudiantesMateria = new ArrayList<Estudiante>();
-		for (Estudiante estudiante : estudiantes) {
-			if (null != estudiante.getMaterias()) {
-				for (MateriaAlumno auxMateria : estudiante.getMaterias()) {
-					if (auxMateria.getId().equals(materia.getId())) {
-						estudiantesMateria.add(estudiante);
-						break;
+		if (false == director) {
+			for (Estudiante estudiante : estudiantes) {
+				if (null != estudiante.getMaterias()) {
+					for (MateriaAlumno auxMateria : estudiante.getMaterias()) {
+						if (auxMateria.getId().equals(materia.getId())
+								&& estudiante.getSemestre() == auxMateria.getSemestre()) {
+							estudiantesMateria.add(estudiante);
+						}
+					}
+				}
+			}
+		} else {
+			for (Estudiante estudiante : estudiantes) {
+				if (null != estudiante.getMaterias()) {
+					for (MateriaAlumno auxMateria : estudiante.getMaterias()) {
+						if (auxMateria.getId().equals(materia.getId())
+								&& estudiante.getSemestre() >= auxMateria.getSemestre()) {
+							estudiantesMateria.add(estudiante);
+						}
 					}
 				}
 			}
@@ -419,7 +433,7 @@ public class ControlEscolar {
 	public Profesor profePorNombre(String nombre) {
 
 		if (profesores != null) {
-			for (int i = 0; i < estudiantes.size(); i++) {
+			for (int i = 0; i < profesores.size(); i++) {
 				if (profesores.get(i).getNombre().equals(nombre)) {
 
 					return profesores.get(i);
@@ -428,5 +442,277 @@ public class ControlEscolar {
 		}
 		return null;
 	}
+
+	public List<Materia> materiasDisponibles() {
+		List<Materia> aux = new ArrayList<Materia>();
+		if (materias != null) {
+			for (int i = 0; i < materias.size(); i++) {
+				if (!materias.get(i).isAsignada()) {
+
+					aux.add(materias.get(i));
+				}
+			}
+		}
+		return aux;
+	}
+
+	public List<Carrera> carrerasDisponibles() {
+		List<Carrera> aux = new ArrayList<Carrera>();
+		if (carreras != null) {
+			for (int i = 0; i < carreras.size(); i++) {
+				if (false == carreras.get(i).isConDirecCarrera()) {
+
+					aux.add(carreras.get(i));
+				}
+			}
+		}
+		return aux;
+	}
+
+	public String cuenta() {
+		int aux = estudiantes.size() + profesores.size();
+		return String.valueOf(aux);
+	}
+
+	public void revalidar(Estudiante estudiante) {
+		for (int i = 0; i < estudiante.getMaterias().size(); i++) {
+			if (estudiante.getSemestre() > materias.get(i).getSemestre()) {
+				estudiante.getMaterias().get(i).setPrimerParcial(8D);
+				estudiante.getMaterias().get(i).setSegundoParcial(8D);
+				estudiante.getMaterias().get(i).setProyecto(8D);
+				estudiante.getMaterias().get(i).setExamenFinal(8D);
+			}
+		}
+	}
+
+	public void actualizarDirecMateria(Carrera carrera) {
+
+		for (int i = 0; i < materias.size(); i++) {
+
+			if (materias.get(i).getCarrera().equals(carrera)) {
+
+				materias.get(i).getCarrera().setConDirecCarrera(true);
+
+			}
+		}
+	}
+
+	public List<Materia> materiasCarrera(Carrera carrera) {
+		List<Materia> auxList = new ArrayList<>();
+		for (Materia materia : materias) {
+			if (materia.getCarrera().equals(carrera)) {
+				auxList.add(materia);
+			}
+		}
+
+		return auxList;
+	}
+
+	public List<Materia> materiasCarreraSemestre(Carrera carrera, Integer semestre) {
+		List<Materia> auxList = new ArrayList<>();
+		for (Materia materia : materias) {
+			if (materia.getCarrera().equals(carrera) && materia.getSemestre().equals(semestre)) {
+				auxList.add(materia);
+			}
+		}
+
+		return auxList;
+	}
+
+	public List<Estudiante> estudiantesDeCarrera(Carrera carrera) {
+		List<Estudiante> auxList = new ArrayList<>();
+		for (Estudiante estudiante : estudiantes) {
+			if (estudiante.getCarrera().equals(carrera)) {
+				auxList.add(estudiante);
+			}
+		}
+
+		return auxList;
+	}
+
+	public List<Materia> materiasCarreraSemestreProfe(Carrera carrera, Integer semestre, Profesor profe) {
+		List<Materia> auxList = new ArrayList<>();
+		for (Materia materia : profe.getMaterias()) {
+			if (materia.getCarrera().equals(carrera) && materia.getSemestre().equals(semestre)) {
+				auxList.add(materia);
+			}
+		}
+
+		return auxList;
+	}
+
+	public List<Materia> materiasCarreraProfe(Carrera carrera, Profesor profe) {
+		List<Materia> auxList = new ArrayList<>();
+		for (Materia materia : profe.getMaterias()) {
+			if (materia.getCarrera().equals(carrera)) {
+				auxList.add(materia);
+			}
+		}
+
+		return auxList;
+	}
+
+	public List<Materia> materiasSemestreProfe(Integer semestre, Profesor profe) {
+		List<Materia> auxList = new ArrayList<>();
+		for (Materia materia : profe.getMaterias()) {
+			if (materia.getSemestre().equals(semestre)) {
+				auxList.add(materia);
+			}
+		}
+
+		return auxList;
+	}
+
+	public String mostrarCalificacionesMateria(Estudiante estudiante, Materia materia) {
+
+		String calificaciones = "";
+		List<MateriaAlumno> aux = estudiante.getMaterias();
+		for (int j = 0; j < aux.size(); j++) {
+			if (aux.get(j).getId().equals(materia.getId())) {
+				calificaciones = estudiante.getNombre() + " calificaciones:\nPrimer parcial: "
+						+ valida.verificarCalificacion(aux.get(j).getPrimerParcial()) + "\nSegundo parcial: "
+						+ valida.verificarCalificacion(aux.get(j).getSegundoParcial()) + "\nProyecto: "
+						+ valida.verificarCalificacion(aux.get(j).getProyecto()) + "\nExamen final: "
+						+ valida.verificarCalificacion(aux.get(j).getExamenFinal());
+
+			}
+
+		}
+		return calificaciones;
+
+	}
+
+	public String mostrarCalificacionesMaterias(Materia materia) {
+
+		String calificaciones = materia.getNombre() + " calificaciones:";
+
+		List<Estudiante> estudiantesAux = estudiantesDeMateria(materia, false);
+		for (Estudiante estudiante : estudiantesAux) {
+
+			calificaciones += "\n" + mostrarCalificacionesMateria(estudiante, materia);
+
+		}
+
+		return calificaciones;
+
+	}
+
+	public String mostrarCalificacionesSemestre(Integer semestre, Profesor profe) {
+
+		String calificaciones = "";
+
+		List<Materia> materiasAux = materiasSemestreProfe(semestre, profe);
+
+		if (!materiasAux.isEmpty()) {
+
+			for (Materia materia : materiasAux) {
+
+				calificaciones += "\n" + mostrarCalificacionesMaterias(materia);
+
+			}
+
+		} else {
+
+			calificaciones = "No hay coincidencias";
+
+		}
+
+		return calificaciones;
+
+	}
+
+	public String mostrarCalificacionesCarreraSemestre(Carrera carrera, Integer semestre, Profesor profe) {
+
+		String calificaciones = "";
+
+		List<Materia> materiasAux = materiasCarreraSemestreProfe(carrera, semestre, profe);
+
+		if (!materiasAux.isEmpty()) {
+
+			for (Materia materia : materiasAux) {
+
+				calificaciones += "\n" + mostrarCalificacionesMaterias(materia);
+
+			}
+
+		} else {
+
+			calificaciones = "No hay coincidencias";
+
+		}
+
+		return calificaciones;
+
+	}
+
+	public String mostrarCalificacionesCarrera(Carrera carrera, Profesor profe) {
+
+		String calificaciones = "";
+
+		List<Materia> materiasAux = materiasCarreraProfe(carrera, profe);
+
+		if (!materiasAux.isEmpty()) {
+
+			for (Materia materia : materiasAux) {
+
+				calificaciones += "\n" + mostrarCalificacionesMaterias(materia);
+
+			}
+
+		} else {
+
+			calificaciones = "No hay coincidencias";
+
+		}
+
+		return calificaciones;
+
+	}
+
+	public String promedioEstudianteSemestre(Estudiante estudiante, Integer semestre) {
+
+		String respuesta = "";
+		List<MateriaAlumno> materias = estudiante.getMaterias();
+		for (int j = 0; j < materias.size(); j++) {
+			if (semestre == materias.get(j).getSemestre()) {
+
+				respuesta += mostrarCalificacionesMateria(estudiante, materias.get(j));
+
+			}
+		}
+
+		return respuesta;
+
+	}
+
+	public List<MateriaAlumno> materiasSemestreEstudiante (Estudiante estudiante, Integer semestre){
+		
+		List<MateriaAlumno> materiasAux=new ArrayList<MateriaAlumno>() ;
+		
+		for (MateriaAlumno materia: estudiante.getMaterias()) {
+			
+			if (semestre == materia.getSemestre()) {
+				
+				materiasAux.add(materia);
+				
+			}
+		}
+		
+		return materiasAux;
+		
+	}
+	
+	public List<String> obtenerSemestres(int semestreAlumno) {
+		
+        List<String> semestres = new ArrayList<>();
+        semestreAlumno=(semestreAlumno==-1)?8:semestreAlumno;
+
+            for (int i = 1; i <= semestreAlumno; i++) {
+                semestres.add(String.valueOf(i));
+            }
+            
+
+        return semestres;
+    }
 
 }

@@ -12,46 +12,13 @@
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <Label layoutX="436.0" layoutY="121.0" text="Elige la carrera a asignar" />
-                  <ChoiceBox fx:id="elegirCarrera" layoutX="458.0" layoutY="196.0" prefWidth="150.0" />
+                  <ChoiceBox fx:id="elegirCarrera" layoutX="459.0" layoutY="160.0" prefWidth="150.0" />
                   <Button layoutX="489.0" layoutY="391.0" mnemonicParsing="false" onAction="#guardarCarrera" text="Guardar" />
                   <Label fx:id="noCarrera" layoutX="397.0" layoutY="321.0" text="No se ha seleccionado una carrera" textFill="RED" visible="false" />
+                  <ChoiceBox fx:id="elegirSemestre" layoutX="458.0" layoutY="296.0" prefWidth="150.0" />
+                  <Label layoutX="387.0" layoutY="233.0" text="Elige el semestre en el que empezara" />
                </children></AnchorPane>
       </content>
     </Tab>
-    <Tab text="Calificar">
-      <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <Label layoutX="44.0" layoutY="34.0" text="Elige la materia para calificar" />
-                  <ChoiceBox fx:id="elegirMaterias" layoutX="83.0" layoutY="84.0" prefWidth="150.0" />
-                  <Label layoutX="56.0" layoutY="131.0" text="Calificacion primer parcial" />
-                  <TextField fx:id="primerParcial" layoutX="46.0" layoutY="185.0" />
-                  <TextField fx:id="segundoParcial" layoutX="46.0" layoutY="295.0" />
-                  <Label layoutX="44.0" layoutY="242.0" text="Calificacion segundo parcial" />
-                  <TextField fx:id="examen" layoutX="47.0" layoutY="404.0" />
-                  <Label layoutX="57.0" layoutY="350.0" text="Calificacion examen final" />
-                  <Label layoutX="56.0" layoutY="469.0" text="Calificacion proyecto final" />
-                  <TextField fx:id="proyecto" layoutX="46.0" layoutY="523.0" />
-                  <Button layoutX="692.0" layoutY="523.0" mnemonicParsing="false" onAction="#guardarCalificacion" text="Guardar" />
-                  <Button layoutX="624.0" layoutY="84.0" mnemonicParsing="false" onAction="#actualizarMaterias" text="Actualizar lista de materias" />
-                  <Label layoutX="546.0" layoutY="229.0" text="En caso de ingresar un valor no numerico sera 0" />
-                  <Label fx:id="sinDatos" layoutX="694.0" layoutY="364.0" text="Faltan datos" textFill="RED" visible="false" />
-               </children></AnchorPane>
-      </content>
-    </Tab>
-      <Tab text="Promedio">
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-                  <Label layoutX="399.0" layoutY="459.0" text="Promedio:" />
-                  <Label fx:id="mostrarPromedio" layoutX="489.0" layoutY="459.0" />
-                  <Label layoutX="123.0" layoutY="221.0" text="Selecciona una materia (En caso de no seleccionar se dara promedio general del semestre)" />
-                  <ChoiceBox fx:id="materiaPromedio" layoutX="414.0" layoutY="269.0" prefWidth="150.0" />
-                  <ChoiceBox fx:id="semestrePromedio" layoutX="414.0" layoutY="163.0" prefWidth="150.0" />
-                  <Label layoutX="388.0" layoutY="113.0" text="Selecciona un semestre" />
-                  <Button layoutX="428.0" layoutY="359.0" mnemonicParsing="false" onAction="#promedio" text="Promediar" />
-               </children></AnchorPane>
-        </content>
-      </Tab>
   </tabs>
 </TabPane>

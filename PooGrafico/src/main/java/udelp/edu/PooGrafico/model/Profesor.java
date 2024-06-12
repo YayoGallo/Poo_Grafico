@@ -12,9 +12,11 @@ public class Profesor extends Persona {
 
 	private Date fechaDeIngreso;
 	private List<Materia> materias;
-	public Profesor(String nombre,Date nacimiento, Character sexo, Date ingreso) throws ParseException {
+	private Carrera esDirector;
+	
+	public Profesor(String nombre,Date nacimiento, Character sexo, Date ingreso, String cuenta) throws ParseException {
 		
-		super(nombre, nacimiento, sexo);
+		super(nombre, nacimiento, sexo, cuenta);
         this.fechaDeIngreso = ingreso;
 		
 	}

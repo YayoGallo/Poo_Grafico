@@ -125,23 +125,13 @@ public class FXMLController implements Initializable {
 	private TableColumn<Estudiante, String> colIDEstudiantes;
 	@FXML
 	private TableColumn<Estudiante, String> colCarrera;
-	// Recursos promedios
-	@FXML
-	private ChoiceBox<Materia> selecMateria;
-	@FXML
-	private ChoiceBox<String> selecCarrera;
-	@FXML
-	private ChoiceBox<String> selecSemestre;
-	@FXML
-	private Label mostrarPromedio;
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		// TODO
 		ObservableList<String> semestres = FXCollections.observableArrayList();
-		semestres.addAll("1", "2", "3", "4", "5", "6");
+		semestres.addAll("1", "2", "3", "4", "5", "6", "7", "8");
 		elegirSemestre.setItems(semestres);
-		selecSemestre.setItems(semestres);
 		ObservableList<String> genero = FXCollections.observableArrayList();
 		genero.addAll("M", "F");
 		generoProfe.setItems(genero);
@@ -172,7 +162,6 @@ public class FXMLController implements Initializable {
 				carreras.add(carrera.getNombre());
 			}
 			elegirCarrera.setItems(carreras);
-			selecCarrera.setItems(carreras);
 		}
 
 	}
@@ -200,7 +189,7 @@ public class FXMLController implements Initializable {
 		if (!txtNombreProfe.getText().isEmpty() && !generoProfe.getValue().isEmpty()
 				&& null != fechaNacimientoProfe.getValue() && null != fechaIngresoProfe.getValue()
 				&& !usuarioProfe.getText().isEmpty() && !contraProfe.getText().isEmpty()) {
-			if (valida.validaContraseña(contraProfe.getText()) && valida.validaUsuario(usuarioProfe.getText())) {
+			if (valida.validaContraseña(contraProfe.getText()) && valida.validaUsuario(usuarioProfe.getText()) && valida.validaTiene30(fechaNacimientoProfe.getValue())) {
 				String nombre = txtNombreProfe.getText();
 				Instant instant = fechaNacimientoProfe.getValue().atStartOfDay().atZone(ZoneId.systemDefault())
 						.toInstant();
@@ -208,7 +197,7 @@ public class FXMLController implements Initializable {
 				instant = fechaIngresoProfe.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
 				Date ingreso = Date.from(instant);
 				Character sexo = generoProfe.getValue().equalsIgnoreCase("m") ? 'M' : 'F';
-				Profesor profe = new Profesor(nombre, nacimiento, sexo, ingreso);
+				Profesor profe = new Profesor(nombre, nacimiento, sexo, ingreso, movimientos.cuenta());
 				movimientos.altaProfesor(profe);
 				exitoProfe.setVisible(true);
 				Rol rol = new Rol(nombre, "profes");
@@ -226,13 +215,13 @@ public class FXMLController implements Initializable {
 	private void btnEstudianteClicked(ActionEvent event) throws ParseException {
 		if (!txtNombreEstudiante.getText().isEmpty() && !generoEstudiante.getValue().isEmpty()
 				&& null != fechaNacimientoEstudiante.getValue() && !usuarioAlumno.getText().isEmpty() && !contraAlumno.getText().isEmpty()) {
-			if (valida.validaContraseña(contraAlumno.getText()) && valida.validaUsuario(usuarioAlumno.getText())) {
+			if (valida.validaContraseña(contraAlumno.getText()) && valida.validaUsuario(usuarioAlumno.getText()) && valida.validaTiene17(fechaNacimientoEstudiante.getValue())) {
 				String nombre = txtNombreEstudiante.getText();
 				Instant instant = fechaNacimientoEstudiante.getValue().atStartOfDay().atZone(ZoneId.systemDefault())
 						.toInstant();
 				Date nacimiento = Date.from(instant);
 				Character sexo = generoEstudiante.getValue().equalsIgnoreCase("m") ? 'M' : 'F';
-				Estudiante estudiante = new Estudiante(nombre, nacimiento, sexo);
+				Estudiante estudiante = new Estudiante(nombre, nacimiento, sexo, movimientos.cuenta());
 				movimientos.altaEstudiante(estudiante);
 				exitoEstudiante.setVisible(true);
 				Rol rol = new Rol(nombre, "alumnos");
@@ -262,16 +251,20 @@ public class FXMLController implements Initializable {
 	private void handleSeleccionarProfesor(MouseEvent event) throws IOException {
 		Profesor profesorSeleccionado = tablaProfe.getSelectionModel().getSelectedItem();
 		if (profesorSeleccionado != null) {
-			// Cargar la nueva escena para asignar materias
+			
+			tablaProfe.setDisable(true);
+			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AsignarMaterias.fxml"));
 			Parent root = loader.load();
 			AsignarMateriasController controller = loader.getController();
-			controller.initData(profesorSeleccionado, movimientos);
+			controller.initData(profesorSeleccionado);
 			Scene scene = new Scene(root);
 			Stage stage = new Stage();
 			stage.setScene(scene);
 			stage.setTitle("Asignar Materias a " + profesorSeleccionado.getNombre());
 			stage.show();
+			
+			stage.setOnHidden(e -> tablaProfe.setDisable(false));
 		}
 	}
 
@@ -297,52 +290,24 @@ public class FXMLController implements Initializable {
 	private void seleccionarEstudiante(MouseEvent event) throws IOException {
 		Estudiante estudianteSeleccionado = tablaEstudiantes.getSelectionModel().getSelectedItem();
 		if (estudianteSeleccionado != null) {
-			// Cargar la nueva escena para asignar materias
+			
+			tablaEstudiantes.setDisable(true);
+			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ControlEstudiantes.fxml"));
 			Parent root = loader.load();
 			ControladorEstudiante controller = loader.getController();
-			controller.initData(estudianteSeleccionado, movimientos);
+			controller.initData(estudianteSeleccionado);
 			Scene scene = new Scene(root);
 			Stage stage = new Stage();
 			stage.setScene(scene);
 			stage.setTitle("Perfil educativo: " + estudianteSeleccionado.getNombre());
 			stage.show();
+			
+			stage.setOnHidden(e -> tablaEstudiantes.setDisable(false));
+			
 		}
 	}
 
-	@FXML
-	private void promedio(ActionEvent event) {
-		String respuesta;
-		if (null == selecMateria.getValue() && null == selecSemestre.getValue() && null != selecCarrera.getValue()) {
-			Double promedioCarrera = movimientos.promedioCarrera(selecCarrera.getValue());
-			respuesta = promedioCarrera == null ? "Faltan datos para promediar" : String.valueOf(promedioCarrera);
-			mostrarPromedio.setText(respuesta);
-		} else if (null == selecMateria.getValue() && null != selecSemestre.getValue()
-				&& null != selecCarrera.getValue()) {
-			int semestre = valida.esInt(selecSemestre.getValue());
-			Double promedioSemestre = movimientos.promedioSemestre(semestre, selecCarrera.getValue());
-			respuesta = promedioSemestre == null ? "Faltan datos para promediar" : String.valueOf(promedioSemestre);
-			mostrarPromedio.setText(respuesta);
-		} else if (null != selecMateria.getValue() && null != selecCarrera.getValue()) {
-			Double promedioMateria = movimientos.promedioMateria(selecCarrera.getValue(),
-					selecMateria.getValue().getId());
-			respuesta = promedioMateria == null ? "Faltan datos para promediar" : String.valueOf(promedioMateria);
-			mostrarPromedio.setText(respuesta);
-		}
-
-	}
-
-	@FXML
-	private void actualizarMaterias(ActionEvent event) {
-
-		if (null != movimientos.getMaterias()) {
-
-			ObservableList<Materia> materias = FXCollections.observableArrayList();
-			materias.addAll(movimientos.getMaterias());
-			selecMateria.setItems(materias);
-
-		}
-	}
 
 	@FXML
 	private void guardarArchivo() {

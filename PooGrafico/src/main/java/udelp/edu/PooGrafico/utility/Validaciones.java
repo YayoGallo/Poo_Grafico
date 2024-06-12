@@ -2,6 +2,7 @@ package udelp.edu.PooGrafico.utility;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Period;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -82,7 +83,7 @@ public class Validaciones {
 		if (horario.length() == 11) {
 			String[] partes = horario.split("-");
 			String horaInicio = partes[0];
-			String horaFin = partes[1]; 
+			String horaFin = partes[1];
 
 			try {
 
@@ -107,24 +108,41 @@ public class Validaciones {
 		try {
 			respuesta = Double.parseDouble(numero);
 		} catch (Exception e) {
-			respuesta = 0;
+			respuesta = -1;
 		}
 		return respuesta;
 
 	}
-	
+
 	public boolean validaContraseña(String password) {
 		String regex = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&-+=()¡?¿/%]).{8,}$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(password);
-        return matcher.matches();
-    }
-	
-	public boolean validaUsuario (String usuario) {
-		String regex = "[ A-Za-z0-9]*";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(usuario);
-        return matcher.matches();
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(password);
+		return matcher.matches();
 	}
+
+	public boolean validaUsuario(String usuario) {
+		String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(usuario);
+		return matcher.matches();
+	}
+
+	public boolean validaTiene17(LocalDate nacimiento) {
+		LocalDate fechaActual = LocalDate.now();
+		Period periodo = Period.between(nacimiento, fechaActual);
+		return periodo.getYears() >= 17;
+	}
+
+	public boolean validaTiene30(LocalDate nacimiento) {
+		LocalDate fechaActual = LocalDate.now();
+		Period periodo = Period.between(nacimiento, fechaActual);
+		return periodo.getYears() >= 30;
+	}
+	
+	public String verificarCalificacion(Double calificacion) {
+	    return calificacion != null ? calificacion.toString() : "sin calificar";
+	}
+
 
 }

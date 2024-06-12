@@ -44,6 +44,8 @@ public class ControladorInicio {
 			Usuario aux = control.coincidencias(userText.getText(), passwordText.getText());
 
 			if (null != aux) {
+				
+				Stage currentStage = (Stage) userText.getScene().getWindow();
 
 				switch (aux.getRol().getCodigo()) {
 				case "admin":
@@ -78,6 +80,8 @@ public class ControladorInicio {
 					stage2.show();
 					break;
 				}
+				
+				currentStage.close();
 
 			} else {
 				errorUsuario.setVisible(true);

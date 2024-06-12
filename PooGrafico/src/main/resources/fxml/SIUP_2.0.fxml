@@ -59,13 +59,12 @@
                         <Label fx:id="sinDatosProfe" layoutX="343.0" layoutY="222.0" text="Faltan datos por ingresar" textFill="RED" visible="false" />
                         <Label fx:id="exitoProfe" layoutX="313.0" layoutY="522.0" text="Datos ingresados correctamente" textFill="#2fff00" visible="false" />
                         <TextField fx:id="usuarioProfe" layoutX="532.0" layoutY="144.0" />
-                        <Label layoutX="574.0" layoutY="88.0" text="Ingresa el usuario" />
+                        <Label layoutX="574.0" layoutY="88.0" text="Ingresa un correo" />
                         <Label layoutX="560.0" layoutY="243.0" text="Ingresa la contraseña" />
                         <PasswordField fx:id="contraProfe" layoutX="532.0" layoutY="290.0" />
-                        <Label layoutX="460.0" layoutY="392.0" text="Usuario: no debe de tener carcteres especiales" textFill="RED" />
                         <Label layoutX="485.0" layoutY="432.0" prefHeight="27.0" prefWidth="318.0" text="Contraseña: debe contener 8 caracteres" textAlignment="CENTER" textFill="RED" textOverrun="WORD_ELLIPSIS" />
-                        <Label layoutX="529.0" layoutY="479.0" text="Almenos un caracter especial" textFill="RED" />
-                        <Label layoutX="564.0" layoutY="522.0" text="Almenos un numero" textFill="RED" />
+                        <Label layoutX="529.0" layoutY="479.0" text="Al menos un caracter especial" textFill="RED" />
+                        <Label layoutX="564.0" layoutY="522.0" text="Al menos un numero" textFill="RED" />
                         <Label fx:id="malUsuarioProfe" layoutX="517.0" layoutY="350.0" text="Usuario o contraseña incorrecto" textFill="RED" visible="false" />
                      </children>
                   </AnchorPane>
@@ -86,9 +85,9 @@
                         <Label fx:id="sinDatosEstudiante" layoutX="331.0" layoutY="471.0" text="Hacen falta datos para el registro" textFill="RED" visible="false" />
                         <PasswordField fx:id="contraAlumno" layoutX="546.0" layoutY="292.0" />
                         <TextField fx:id="usuarioAlumno" layoutX="546.0" layoutY="165.0" />
-                        <Label layoutX="588.0" layoutY="114.0" text="Ingresa el usuario" />
+                        <Label layoutX="588.0" layoutY="114.0" text="Ingresa un correo" />
                         <Label layoutX="574.0" layoutY="241.0" text="Ingresa la contraseña" />
-                        <Label fx:id="malUsuarioAlumno" layoutX="531.0" layoutY="365.0" text="Usuario o contraseña incorrecto" textFill="RED" visible="false" />
+                        <Label fx:id="malUsuarioAlumno" layoutX="589.0" layoutY="359.0" text="Datos incorrectos" textFill="RED" visible="false" />
                      </children>
                   </AnchorPane>
               </content>
@@ -120,24 +119,6 @@
                           </columns>
                         </TableView>
                         <Button layoutX="749.0" layoutY="57.0" mnemonicParsing="false" onAction="#actualizarTablaEstudiante" text="Actualizar" />
-                     </children>
-                  </AnchorPane>
-              </content>
-            </Tab>
-            <Tab text="Promedios">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ChoiceBox fx:id="selecCarrera" layoutX="367.0" layoutY="69.0" prefWidth="150.0" />
-                        <ChoiceBox fx:id="selecSemestre" layoutX="367.0" layoutY="163.0" prefWidth="150.0" />
-                        <ChoiceBox fx:id="selecMateria" layoutX="367.0" layoutY="255.0" prefWidth="150.0" />
-                        <Label layoutX="361.0" layoutY="29.0" text="Selecciona la carrera" />
-                        <Label layoutX="353.0" layoutY="126.0" text="Selecciona el semestre" />
-                        <Label layoutX="359.0" layoutY="216.0" text="Selecciona la materia" />
-                        <Button layoutX="664.0" layoutY="255.0" mnemonicParsing="false" onAction="#actualizarMaterias" text="Actualizar materias" />
-                        <Button layoutX="356.0" layoutY="333.0" mnemonicParsing="false" onAction="#promedio" text="Obtener promedio" />
-                        <Label layoutX="286.0" layoutY="440.0" text="Promedio general:" />
-                        <Label fx:id="mostrarPromedio" layoutX="442.0" layoutY="440.0" />
                      </children>
                   </AnchorPane>
               </content>
